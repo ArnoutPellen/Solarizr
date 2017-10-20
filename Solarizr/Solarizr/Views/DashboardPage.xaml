@@ -1,0 +1,80 @@
+﻿<Page
+    x:Class="Solarizr.Views.DashboardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Solarizr.Views"
+    xmlns:vm="using:Solarizr.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.DataContext>
+        <vm:DashboardPageViewModel></vm:DashboardPageViewModel>
+    </Page.DataContext>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="0,-1,0,1">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup >
+                <VisualState x:Name="narrowState" >
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0">
+                        </AdaptiveTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="StackPanel_Appointment.Visibility" Value="Collapsed"></Setter>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="wideState" >
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="640">
+                        </AdaptiveTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="StackPanel_Appointment.Visibility" Value="Visible"></Setter>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Grid.Row="1">
+            <TextBlock Text="Current Date"></TextBlock>
+            <TextBlock x:Name="TextBlock_CurrentDate" Text="{Binding CurrentDate}"></TextBlock>
+            <TextBlock Text="Number of appointments"></TextBlock>
+            <TextBlock Text="{Binding NumberOfAppointments}"></TextBlock>
+            <TextBlock Text="Time remaining till next appointment"></TextBlock>
+            <TextBlock Text="{Binding NextAppointment.TimeRemaining}"></TextBlock>
+            <Rectangle x:Name="MapControl" Fill="Aqua" MinHeight="100"></Rectangle>
+            <Rectangle x:Name="WeatherControl" Fill="Bisque" MinHeight="100"></Rectangle>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="1" x:Name="StackPanel_Appointment">
+            <TextBlock Text="Scheduled date and time"></TextBlock>
+            <DatePicker Date="{Binding NextAppointment.ScheduledDateTime}"></DatePicker>
+            <TimePicker Time="{Binding NextAppointment.ScheduledDateTime}"></TimePicker>
+            <TextBlock Text="Appointment status"></TextBlock>
+            <ComboBox ItemsSource="{Binding NextAppointment.AppointmentStatussen}" SelectedItem="{Binding NextAppointment.AppointmentStatus}"></ComboBox>
+            <TextBlock Text="Comments"></TextBlock>
+            <TextBox Text="{Binding NextAppointment.Comments}" Height="150" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBox>
+            <GridView ItemsSource="{Binding NextAppointment.PhotoUrls}" FlowDirection="LeftToRight" MaxHeight="500">
+                <GridView.HeaderTemplate>
+                    <DataTemplate>
+                        <ListViewHeaderItem>
+                            <TextBlock Text="Photo's of customer site"></TextBlock>
+                        </ListViewHeaderItem>
+                    </DataTemplate>
+                </GridView.HeaderTemplate>
+                <GridView.ItemTemplate>
+                    <DataTemplate ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <Image Source="{Binding}" Height="150" Width="150"></Image>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        </StackPanel>
+        <CommandBar Grid.Row="0" Grid.ColumnSpan="2" IsOpen="True"></CommandBar>
+
+    </Grid>
+</Page>
